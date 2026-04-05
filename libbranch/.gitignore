@@ -1,0 +1,4 @@
+libbranch.so
+libbranch.a
+src/*.o
+examples/parallel
