@@ -111,6 +111,26 @@ else
 fi
 echo ""
 
+# Run libbranch C tests
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BLUE}  test_branch (libbranch C integration)${NC}"
+echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+TOTAL_TESTS=$((TOTAL_TESTS + 1))
+LIBBRANCH_DIR="$PROJECT_ROOT/libbranch"
+if [[ ! -x "$LIBBRANCH_DIR/tests/test_branch" ]]; then
+    echo -e "${YELLOW}Building libbranch tests...${NC}"
+    make -C "$LIBBRANCH_DIR" tests 2>&1
+fi
+if BRANCHFS_BIN="$PROJECT_ROOT/target/release/branchfs" "$LIBBRANCH_DIR/tests/test_branch" 2>&1; then
+    PASSED_SUITES=$((PASSED_SUITES + 1))
+    echo -e "${GREEN}Suite test_branch: PASSED${NC}"
+else
+    FAILED_SUITES=$((FAILED_SUITES + 1))
+    FAILED_SUITE_NAMES+=("test_branch")
+    echo -e "${RED}Suite test_branch: FAILED${NC}"
+fi
+echo ""
+
 # Final summary
 echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}       Final Summary${NC}"
